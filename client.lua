@@ -340,7 +340,7 @@ end
 
 ---------- Job Events ----------
 RegisterNetEvent('miwt:c:start_job1', function()
-    if in_work and in_service == true then return end
+    if in_work and c_in_service == true then return end
     local task1 = Config.job1[math.random(1, #Config.job1)]
     cur_task = task1
     in_work = true
