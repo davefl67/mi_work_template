@@ -261,7 +261,7 @@ local function sp_taskped()
         cur_task.loc.x, 
         cur_task.loc.y, 
         cur_task.loc.z-1, 
-        cur_task.loc.h, 
+        cur_task.loc.w, 
         false, true)
     taskped.ped = ped
     TaskStartScenarioInPlace(ped, 'PROP_HUMAN_STAND_IMPATIENT', 0, true)
