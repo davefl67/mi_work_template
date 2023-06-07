@@ -195,7 +195,7 @@ local function zone_vehicle()
                         description = 'Return vehicle to garage',
                         icon = 'car',
                         onSelect = function()
-                            RegisterServerEvent('dl_vehicle')
+                            TriggerServerEvent('dl_vehicle')
                         end,
                     },
                 }
