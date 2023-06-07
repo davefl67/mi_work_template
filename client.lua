@@ -5,6 +5,7 @@ local job_blip = nil
 local cur_task = nil
 local in_work = false
 local c_in_service = false
+local health = GetEntityHealth(source)
 
 local taskped = {
     spawned = false,
@@ -23,6 +24,7 @@ local function workloc_blip()
         Config.wblip.loc.y,
         Config.wblip.loc.z)
     SetBlipSprite(workblip, Config.wblip.sprite)
+    SetBlipDisplay(workblip, 4)
     SetBlipColour(workblip, Config.wblip.color)
     SetBlipScale(workblip, Config.wblip.scale)
     BeginTextCommandSetBlipName('STRING')
@@ -47,44 +49,17 @@ local function vehicle_ped()
         local options = {
             {
                 name = 'spawn_vehicle',
-                label = 'Spawn EMS Scout',
+                label = 'Spawn Faggio',
                 icon = 'fa-solid fa-car',
                 groups = Config.jobname,
                 event = 'spawn_vehicle',
                 onSelect = function()
-                    TriggerServerEvent('sp_vehicle', 'ulsaems')
+                    TriggerServerEvent('sp_vehicle', Config.vehicle.model)
                 end,
                 canInteract = function(_, distance)
                     return distance < 2.0 and c_in_service == true
                 end
             },
-            {
-                name = 'spawn_vehicle',
-                label = 'Spawn EMS Speedo',
-                icon = 'fa-solid fa-truck',
-                groups = Config.jobname,
-                event = 'spawn_vehicle',
-                onSelect = function()
-                    TriggerServerEvent('sp_vehicle', 'ulsaems3')
-                end,
-                canInteract = function(_, distance)
-                    return distance < 2.0 and c_in_service == true
-                end
-            },
-            {
-                name = 'spawn_vehicle',
-                label = 'Spawn Ambulance',
-                icon = 'fa-solid fa-ambulance',
-                groups = Config.jobname,
-                event = 'spawn_vehicle',
-                onSelect = function()
-                    TriggerServerEvent('sp_vehicle', 'ulsaems2')
-                end,
-                canInteract = function(_, distance)
-                    return distance < 2.0 and c_in_service == true
-                end
-            },
-            
         }
     
         exports.ox_target:addLocalEntity(npc, options)
@@ -180,7 +155,7 @@ end
 local function zone_vehicle()
     local vehicle_zone = lib.zones.box({
         coords = Config.vehicle.loc,
-        size = vec3(4, 4, 2),
+        size = vec3(2, 4, 2),
         rotation = Config.vehicle.head,
         debug = Config.debug,
         inside = inside,
@@ -195,7 +170,7 @@ local function zone_vehicle()
                         description = 'Return vehicle to garage',
                         icon = 'car',
                         onSelect = function()
-                            RegisterServerEvent('dl_vehicle')
+                            TriggerServerEvent('dl_vehicle')
                         end,
                     },
                 }
@@ -212,7 +187,7 @@ end
 local function zone_stash()
     exports.ox_target:addBoxZone({
         coords = Config.jobstash.loc,
-        size = vec3(1.5, 0.9, 1),
+        size = vec3(6.25, 0.9, 2),
         rotation = Config.jobstash.head,
         debug = Config.debug,
         options = {
@@ -220,9 +195,9 @@ local function zone_stash()
                 name = 'job_stash',
                 event = 'ox_target:debug',
                 icon = 'fa-solid fa-archive',
-                label = 'Work Lockers',
+                label = Config.jobstash_label,
                 onSelect = function()
-                    ox_inventory:openInventory('stash', {id = 'job1', owner = false})
+                    ox_inventory:openInventory('stash', {id = 'pizza_lockers', owner = false})
                 end
 
             }
@@ -236,7 +211,7 @@ local function sp_jblip()
         RemoveBlip(job_blip)
         job_blip = nil
     end
-    local job_blip = AddBlipForCoord(
+    job_blip = AddBlipForCoord(
         cur_task.loc.x, 
         cur_task.loc.y,
         cur_task.loc.z)
@@ -246,7 +221,7 @@ local function sp_jblip()
         SetBlipRouteColour(job_blip, 68)
         SetBlipScale(job_blip, 0.8)
         BeginTextCommandSetBlipName('STRING')
-        AddTextComponentString('Task 1')
+        AddTextComponentString('Delivery Location')
         EndTextCommandSetBlipName(job_blip)
 end
 
@@ -261,7 +236,7 @@ local function sp_taskped()
         cur_task.loc.x, 
         cur_task.loc.y, 
         cur_task.loc.z-1, 
-        cur_task.loc.h, 
+        cur_task.loc.w, 
         false, true)
     taskped.ped = ped
     TaskStartScenarioInPlace(ped, 'PROP_HUMAN_STAND_IMPATIENT', 0, true)
@@ -272,7 +247,7 @@ local function sp_taskped()
     local ped_options = {
         {
             name = 'miwt:c:dojob1',
-            label = 'Do the job',
+            label = 'Deliver Pizza',
             icon = 'fa-solid fa-box',
             event = 'miwt:c:finish_job1',
             canInteract = function(_, distance)
@@ -340,41 +315,48 @@ end
 
 ---------- Job Events ----------
 RegisterNetEvent('miwt:c:start_job1', function()
-    if in_work and in_service == true then return end
+    if in_work and c_in_service == true then return end
     local task1 = Config.job1[math.random(1, #Config.job1)]
     cur_task = task1
     in_work = true
     lib.notify({
-        title = 'Task active',
-        description = 'Do the job',
+        title = 'Delivery Started',
+        description = 'It\'s pizza time',
         type = 'inform'
     })
     sp_jblip()
     sp_taskped()
+    if health == 0 then
+        TriggerEvent('miwt:c:failed_job')
+    end
 end)
 
 RegisterNetEvent('miwt:c:finish_job1', function()
-    exports.scully_emotemenu:PlayByCommand('notepad')
+    exports.scully_emotemenu:PlayByCommand('carrypizza')
     if lib.progressBar({
         duration = 3000,
-        label = 'Joing Job 1',
+        label = 'Delivering Pizza',
         useWhileDead = false,
         canCancel = true,
         disable = {
             car = true,
         },
-    }) then print('Do stuff when complete') else print('Do stuff when cancelled') end
+    }) then 
+        lib.callback('payout')
+        dl_taskped()
+        RemoveBlip(job_blip)
+        in_work = false
+        cur_task = nil 
+    else 
+        print('Do stuff when cancelled') 
+    end
     exports.scully_emotemenu:CancelAnimation()
-    RemoveBlip(job_blip)
     lib.notify({
-        title = 'Task Completed',
-        description = 'Good job',
+        title = 'Delivery Completed',
+        description = 'Good Pizza Time',
         type = 'success'
     })
-    lib.callback('payout')
-    dl_taskped()
-    in_work = false
-    cur_task = nil
+    
     
 end)
 
@@ -421,6 +403,18 @@ RegisterNetEvent('miwt:c:finish_job2', function()
     end
 end)
 
+RegisterNetEvent('miwt:c:failed_job', function()
+    RemoveBlip(job_blip)
+    lib.notify({
+        title = 'Task Failed',
+        description = 'Not good job',
+        type = 'error'
+    })
+    dl_taskobj()
+    in_work = false
+    cur_task = nil
+end)
+
 ---------- Main Thread ----------
 Citizen.CreateThread(function()
     while res_start == false do
@@ -433,5 +427,6 @@ Citizen.CreateThread(function()
 
         res_start = true
         Citizen.Wait(1000)
+
     end
 end)

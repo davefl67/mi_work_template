@@ -1,4 +1,5 @@
 local pefcl = exports.pefcl
+
 local s_in_service = false
 local paycheckInterval = 15
 local paychecks = {
