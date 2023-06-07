@@ -236,7 +236,7 @@ local function sp_jblip()
         RemoveBlip(job_blip)
         job_blip = nil
     end
-    local job_blip = AddBlipForCoord(
+    job_blip = AddBlipForCoord(
         cur_task.loc.x, 
         cur_task.loc.y,
         cur_task.loc.z)
