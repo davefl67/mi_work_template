@@ -27,3 +27,8 @@ https://streamable.com/lxxpk5
     * Job spawning / interacting with peds
     * Job spawning / interacting with objects
 * Character based lockers
+
+## SQL Insert
+```-- Dumping data for table overextended.ox_groups: ~1 rows (approximately)
+INSERT INTO `ox_groups` (`name`, `label`, `grades`, `hasAccount`, `adminGrade`, `colour`) VALUES
+	('job1', 'Job1', '["a1", "a2", "ab"]', b'0', 3, NULL);```
