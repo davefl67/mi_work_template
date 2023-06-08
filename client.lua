@@ -1,6 +1,7 @@
 local ox_inventory = exports.ox_inventory
 local res_start = false
 
+local workblip = nil
 local job_blip = nil
 local cur_task = nil
 local in_work = false
@@ -19,7 +20,11 @@ local taskobj = {
 
 ---------- Work Location ----------
 local function workloc_blip()
-    local workblip = AddBlipForCoord(
+    if workblip ~= nil then
+        RemoveBlip(workblip)
+        workblip = nil
+    end
+    workblip = AddBlipForCoord(
         Config.wblip.loc.x, 
         Config.wblip.loc.y,
         Config.wblip.loc.z)
@@ -28,7 +33,7 @@ local function workloc_blip()
     SetBlipColour(workblip, Config.wblip.color)
     SetBlipScale(workblip, Config.wblip.scale)
     BeginTextCommandSetBlipName('STRING')
-    AddTextComponentString(Config.wblip.name)
+    AddTextComponentSubstringPlayerName(Config.wblip.name)
     EndTextCommandSetBlipName(workblip)
 end
 
@@ -41,7 +46,7 @@ local function vehicle_ped()
             Config.vehicle_ped.loc.z-1, 
             Config.vehicle_ped.loc.w, 
             false, false)
-        TaskStartScenarioInPlace(npc, 'WORLD_HUMAN_CLIPBOARD_FACILITY', 0, true)
+        TaskStartScenarioInPlace(npc, Config.vehicle_ped.anim, 0, true)
         FreezeEntityPosition(npc, true)
         SetEntityInvincible(npc, true)
         SetBlockingOfNonTemporaryEvents(npc, true)
@@ -101,7 +106,7 @@ local function boss_ped()
             Config.boss_ped.loc.z-1, 
             Config.boss_ped.loc.w, 
             false, false)
-        TaskStartScenarioInPlace(npc, 'PROP_HUMAN_STAND_IMPATIENT', 0, true)
+        TaskStartScenarioInPlace(npc, Config.boss_ped.anim, 0, true)
         FreezeEntityPosition(npc, true)
         SetEntityInvincible(npc, true)
         SetBlockingOfNonTemporaryEvents(npc, true)
@@ -213,7 +218,7 @@ end
 local function zone_stash()
     exports.ox_target:addBoxZone({
         coords = Config.jobstash.loc,
-        size = vec3(6.25, 0.9, 2),
+        size = vec3(1.25, 0.9, 1.5),
         rotation = Config.jobstash.head,
         debug = Config.debug,
         options = {
@@ -223,7 +228,7 @@ local function zone_stash()
                 icon = 'fa-solid fa-archive',
                 label = Config.jobstash_label,
                 onSelect = function()
-                    ox_inventory:openInventory('stash', {id = 'pizza_lockers', owner = false})
+                    ox_inventory:openInventory('stash', {id = 'work_lockers', owner = false})
                 end
 
             }

@@ -1,42 +1,44 @@
 Config = {}
-Config.debug = false
+Config.debug = true
 
-Config.jobname = { 'job1', 'pizza_this' }
-Config.joblabel = 'Pizza This'
+Config.jobname = { 'job1' }
+Config.joblabel = 'Work Place'
 
 Config.wblip = {
-    loc = vector3(807.014, -758.372, 26.78),
-    sprite = 527,
+    loc = vector3(-1072.506, -250.134, 44.021),
+    sprite = 548,
     color = 73,
-    scale = 0.8,
-    name = 'Pizza This'
+    scale = 0.7,
+    name = 'Work Place'
 }
 
-Config.jobstash_id = 'pizza_lockers'
-Config.jobstash_label = 'P.T. Lockers'
+Config.jobstash_id = 'work_lockers'
+Config.jobstash_label = 'Work Lockers'
 Config.jobstash_slots = 20
 Config.jobstash_weight = 100000
 Config.jobstash = {
-    loc = vector3(810.49, -758.227, 31.265),
-    head = 180
+    loc = vector3(-1062.531, -250.712, 44.021),
+    head = 207
 }
 
 Config.boss_ped = {
-    model = 'a_m_m_golfer_01',
-    loc = vector4(810.136, -750.317, 26.78, 90.241)
+    model = 'a_f_y_hipster_01',
+    anim = 'WORLD_HUMAN_DRINKING_FACILITY',
+    loc = vector4(-1063.27, -241.057, 44.021, 206.88)
 }
 
 Config.vehicle_ped = {
-    model = 'a_m_y_business_02',
-    loc = vector4(795.854, -760.65, 26.78, 357.675)
+    model = 'a_m_y_hipster_01',
+    anim = 'PROP_HUMAN_SEAT_CHAIR_DRINK',
+    loc = vector4(-1086.593, -259.95, 37.25, 25)
 }
 
 Config.vehicle = {
     model1 = 'faggio',
-    model2 = 'adder',
+    model2 = 'speedo',
     model3 = 'buffalo',
-    loc = vector3(787.003, -760.564, 25.987),
-    head = 178.247
+    loc = vector3(-1098.6, -257.255, 37.25),
+    head = 139.333
 }
 
 -- peds
