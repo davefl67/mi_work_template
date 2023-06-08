@@ -49,12 +49,38 @@ local function vehicle_ped()
         local options = {
             {
                 name = 'spawn_vehicle',
-                label = 'Spawn Faggio',
+                label = 'Spawn Vehicle 1',
                 icon = 'fa-solid fa-car',
                 groups = Config.jobname,
                 event = 'spawn_vehicle',
                 onSelect = function()
-                    TriggerServerEvent('sp_vehicle', Config.vehicle.model)
+                    TriggerServerEvent('sp_vehicle', Config.vehicle.model1)
+                end,
+                canInteract = function(_, distance)
+                    return distance < 2.0 and c_in_service == true
+                end
+            },
+            {
+                name = 'spawn_vehicle',
+                label = 'Spawn Vehicle 2',
+                icon = 'fa-solid fa-car',
+                groups = Config.jobname,
+                event = 'spawn_vehicle',
+                onSelect = function()
+                    TriggerServerEvent('sp_vehicle', Config.vehicle.model2)
+                end,
+                canInteract = function(_, distance)
+                    return distance < 2.0 and c_in_service == true
+                end
+            },
+            {
+                name = 'spawn_vehicle',
+                label = 'Spawn Vehicle 3',
+                icon = 'fa-solid fa-car',
+                groups = Config.jobname,
+                event = 'spawn_vehicle',
+                onSelect = function()
+                    TriggerServerEvent('sp_vehicle', Config.vehicle.model3)
                 end,
                 canInteract = function(_, distance)
                     return distance < 2.0 and c_in_service == true

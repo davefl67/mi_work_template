@@ -32,7 +32,9 @@ Config.vehicle_ped = {
 }
 
 Config.vehicle = {
-    model = 'faggio',
+    model1 = 'faggio',
+    model2 = 'adder',
+    model3 = 'buffalo',
     loc = vector3(787.003, -760.564, 25.987),
     head = 178.247
 }
