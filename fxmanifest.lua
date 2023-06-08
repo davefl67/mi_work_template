@@ -19,11 +19,17 @@ shared_scripts {
 
 client_scripts {
     '@ox_core/imports/client.lua',
-    'client.lua'
+    'client/jobs.lua',
+    'client/util.lua',
+    'client/main.lua'
 }
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
     '@ox_core/imports/server.lua',
-    'server.lua'
+    'server/main.lua'
+}
+
+exports = {
+
 }
