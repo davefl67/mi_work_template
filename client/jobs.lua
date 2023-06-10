@@ -1,4 +1,18 @@
----------- Job Functions ----------
+-- local variables
+local job_blip = nil
+local cur_task = nil
+local in_work = false
+local c_in_service = false
+local taskped = {
+    spawned = false,
+    ped = nil
+}
+local taskobj = {
+    spawned = false,
+    obj = nil
+}
+
+-- set up job blip
 local function sp_jblip()
     if job_blip ~= nil then
         RemoveBlip(job_blip)
@@ -18,6 +32,7 @@ local function sp_jblip()
         EndTextCommandSetBlipName(job_blip)
 end
 
+-- spawn task ped
 local function sp_taskped()
     if taskped.spawned then return end
     local model = lib.requestmodel(joaat(cur_task.model))
@@ -54,6 +69,7 @@ local function sp_taskped()
     taskped.spawned = true
 end
 
+-- delete task ped
 local function dl_taskped()
     if not taskped.spawned then return end
     exports.ox_target:removeLocalEntity(taskped.ped, { 'miwt:c:dojob1' })
@@ -62,6 +78,7 @@ local function dl_taskped()
     taskped.ped = nil
 end
 
+-- spawn task object
 local function sp_taskobj()
     if taskobj.spawned then return end
     local model = lib.requestModel(joaat(cur_task.object))
@@ -98,6 +115,7 @@ local function sp_taskobj()
     taskobj.spawned = true
 end
 
+-- delete task object
 local function dl_taskobj()
     if not taskobj.spawned then return end
     exports.ox_target:removeLocalEntity(taskobj.obj, { 'miwt:c:dojob2' })

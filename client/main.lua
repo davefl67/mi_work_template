@@ -1,23 +1,10 @@
+-- local variables
 local ox_inventory = exports.ox_inventory
 local res_start = false
-
 local workblip = nil
-local job_blip = nil
-local cur_task = nil
-local in_work = false
 local c_in_service = false
 
-local taskped = {
-    spawned = false,
-    ped = nil
-}
-
-local taskobj = {
-    spawned = false,
-    obj = nil
-}
-
----------- Work Location ----------
+-- load work location blip
 local function workloc_blip()
     if workblip ~= nil then
         RemoveBlip(workblip)
@@ -36,6 +23,7 @@ local function workloc_blip()
     EndTextCommandSetBlipName(workblip)
 end
 
+-- spawn vehicle ped
 local function vehicle_ped()
     if lib.requestModel(Config.vehicle_ped.model, 1000) then
         local npc = CreatePed(1, 
@@ -50,6 +38,8 @@ local function vehicle_ped()
         SetEntityInvincible(npc, true)
         SetBlockingOfNonTemporaryEvents(npc, true)
 
+        local car1 = Config.vehicle.model1
+
         local options = {
             {
                 name = 'spawn_vehicle',
@@ -58,33 +48,7 @@ local function vehicle_ped()
                 groups = Config.jobname,
                 event = 'spawn_vehicle',
                 onSelect = function()
-                    TriggerServerEvent('sp_vehicle', Config.vehicle.model1)
-                end,
-                canInteract = function(_, distance)
-                    return distance < 2.0 and c_in_service == true
-                end
-            },
-            {
-                name = 'spawn_vehicle',
-                label = 'Spawn Vehicle 2',
-                icon = 'fa-solid fa-car',
-                groups = Config.jobname,
-                event = 'spawn_vehicle',
-                onSelect = function()
-                    TriggerServerEvent('sp_vehicle', Config.vehicle.model2)
-                end,
-                canInteract = function(_, distance)
-                    return distance < 2.0 and c_in_service == true
-                end
-            },
-            {
-                name = 'spawn_vehicle',
-                label = 'Spawn Vehicle 3',
-                icon = 'fa-solid fa-car',
-                groups = Config.jobname,
-                event = 'spawn_vehicle',
-                onSelect = function()
-                    TriggerServerEvent('sp_vehicle', Config.vehicle.model3)
+                    TriggerServerEvent('sp_vehicle', car1)
                 end,
                 canInteract = function(_, distance)
                     return distance < 2.0 and c_in_service == true
@@ -96,6 +60,7 @@ local function vehicle_ped()
     end
 end
 
+-- spawn tasker ped
 local function boss_ped()
     if lib.requestModel(Config.boss_ped.model, 1000) then
         local npc = CreatePed(1, 
@@ -180,6 +145,7 @@ local function boss_ped()
     end
 end
 
+-- spawn vehicle zone
 local function zone_vehicle()
     local vehicle_zone = lib.zones.box({
         coords = Config.vehicle.loc,
@@ -211,6 +177,7 @@ local function zone_vehicle()
     })
 end
 
+-- spawn stash zone
 local function zone_stash()
     exports.ox_target:addBoxZone({
         coords = Config.jobstash.loc,
@@ -233,7 +200,7 @@ local function zone_stash()
 end
 
 
----------- Main Thread ----------
+-- main thread
 Citizen.CreateThread(function()
     while res_start == false do
         
