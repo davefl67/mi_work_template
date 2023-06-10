@@ -1,6 +1,7 @@
 -- local veriables
-local job_vehicle = nil
 local s_in_service = false
+local vehicle = nil
+
 local jobstash = {
     id = Config.jobstash_id,
     label = Config.jobstash_label,
@@ -22,11 +23,6 @@ AddEventHandler('onServerResourceStart', function(resourceName)
     end
 end)
 
-local function sellVehicle(entity)
-    local vehicle = Ox.GetVehicle(entity)
-    return vehicle and vehicle.delete()
-end
-
 -- simple player service checker (server side)
 lib.callback.register('checkin', function(source)
     if s_in_service == false then
@@ -37,22 +33,22 @@ lib.callback.register('checkin', function(source)
 end)
 
 -- spawn vehicle
-RegisterServerEvent('sp_vehicle', function(job_vehicle)
+RegisterServerEvent('sp_vehicle', function(vehicle)
     local player = Ox.GetPlayer(source)
     print(json.encode(player, { indent = true }))
 
-    job_vehicle = Ox.CreateVehicle({
-        model = job_vehicle,
+    vehicle = Ox.CreateVehicle({
+        model = vehicle,
         group = Config.jobname,
         owner = player.charid,
     }, Config.vehicle.loc, Config.vehicle.head)
-    print(json.encode(job_vehicle, { indent = true }))
+    print(json.encode(vehicle, { indent = true }))
 end)
 
 -- despawn & de-own vehicle
 RegisterServerEvent('dl_vehicle', function(source)
-    local player = Ox.GetPlayer(source)
-    local entity = Ox.GetVehicle(player)
+    --local player = GetPlayerPed(source)
+    local entity = vehicle
 
     if entity == 0 then return end
 
@@ -66,5 +62,7 @@ RegisterServerEvent('dl_vehicle', function(source)
         -- it's a random vehicle, i.e. traffic or a vehicle that has been spawned without using ox_core
         DeleteEntity(entity)
     end
+
+    -- tell the client the vehicle was deleted
     return true
 end)

@@ -38,8 +38,6 @@ local function vehicle_ped()
         SetEntityInvincible(npc, true)
         SetBlockingOfNonTemporaryEvents(npc, true)
 
-        local car1 = Config.vehicle.model1
-
         local options = {
             {
                 name = 'spawn_vehicle',
@@ -48,7 +46,7 @@ local function vehicle_ped()
                 groups = Config.jobname,
                 event = 'spawn_vehicle',
                 onSelect = function()
-                    TriggerServerEvent('sp_vehicle', car1)
+                    TriggerServerEvent('sp_vehicle', 'faggio')
                 end,
                 canInteract = function(_, distance)
                     return distance < 2.0 and c_in_service == true
