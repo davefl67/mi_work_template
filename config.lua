@@ -2,7 +2,7 @@ Config = {}
 Config.debug = true
 
 Config.jobname = { 'job1' }
-Config.joblabel = 'Work Place'
+Config.jobgrades = { 'a1', 'a2, ab' }
 
 Config.wblip = {
     loc = vector3(-467.96, -58.141, 44.513),
@@ -12,13 +12,23 @@ Config.wblip = {
     name = 'Work Place'
 }
 
-Config.jobstash_id = 'work_lockers'
-Config.jobstash_label = 'Work Lockers'
-Config.jobstash_slots = 20
-Config.jobstash_weight = 100000
-Config.jobstash = {
-    loc = vector3(-469.151, -63.008, 44.513),
-    head = 200
+Config.peds = {
+
+    boss = {
+        model = 'a_f_y_hipster_01',
+        anim = 'WORLD_HUMAN_DRINKING_FACILITY',
+        loc = vector4(-463.779, -63.579, 44.513, 42.293)
+    },
+    work = {
+        model = 'a_f_y_hipster_02',
+        anim = 'WORLD_HUMAN_DRINKING_FACILITY',
+        loc = vector4(-462.3, -62.58, 44.513, 39.882)
+    },
+    vehicle = {
+        model = 'a_m_y_hipster_01',
+        anim = 'WORLD_HUMAN_DRINKING_FACILITY',
+        loc = vector4(-460.03, -60.791, 44.513, 40.683)
+    },
 }
 
 Config.boss_ped = {
@@ -26,6 +36,7 @@ Config.boss_ped = {
     anim = 'WORLD_HUMAN_DRINKING_FACILITY',
     loc = vector4(-464.31, -64.054, 44.513, 39.67)
 }
+
 
 Config.vehicle_ped = {
     model = 'a_m_y_hipster_01',
