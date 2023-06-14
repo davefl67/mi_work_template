@@ -2,11 +2,13 @@ Config = {}
 Config.debug = true
 
 Config.job = {
+    -- make sure this matches to the job you want to connect to in your db
     name = 'job1',
     grades = { 'a1', 'a2, ab' }
 }
 
 Config.blip = {
+    -- please don't just leave the blip as 'Work Place'
     loc = vector3(-211.424, -1327.399, 31.3),
     sprite = 548,
     color = 73,
@@ -16,25 +18,26 @@ Config.blip = {
 
 Config.peds = {
 
+    -- for changing animations, use https://github.com/DioneB/gtav-scenarios for refrence
     work = {
-        model = 'mp_m_waremech_01',
-        loc = vector4(-206.181, -1334.369, 31.301, 64.025),
-        anim = 'WORLD_HUMAN_DRINKING_FACILITY',
-        dist = 2
+        model = 'mp_m_waremech_01', -- ped model
+        loc = vector4(-206.181, -1334.369, 31.301, 64.025), -- spawn location
+        anim = 'WORLD_HUMAN_DRINKING_FACILITY', -- standing animation
+        dist = 2 -- distance before textUI appears
     },
 
     spawn = {
-        model = 'u_m_y_smugmech_01',
-        loc = vector4(-198.347, -1324.425, 31.3, 109.679),
-        anim = 'WORLD_HUMAN_DRINKING_FACILITY',
-        dist = 3
+        model = 'u_m_y_smugmech_01', -- ped model
+        loc = vector4(-198.347, -1324.425, 31.3, 109.679), -- spawn location
+        anim = 'WORLD_HUMAN_SMOKING_CLUBHOUSE', -- standing animation
+        dist = 3 -- distance before textUI appears
     },
 
     mngr = {
-        model = 'ig_paige',
-        loc = vector4(-192.903, -1315.493, 30.802, 270.0),
-        anim = 'PROP_HUMAN_SEAT_COMPUTER_LOW',
-        dist = 2
+        model = 'ig_paige', -- ped model
+        loc = vector4(-192.903, -1315.493, 30.802, 270.0), -- spawn location
+        anim = 'PROP_HUMAN_SEAT_COMPUTER_LOW', -- standing animation
+        dist = 2 -- distance before textUI appears
     },
 }
 

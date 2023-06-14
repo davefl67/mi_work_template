@@ -30,7 +30,7 @@ function mngrped:nearby()
     end
     if self.currentDistance < dist and IsControlJustReleased(0, 38) then
         lib.hideTextUI()
-        lib.showContext('work_menu')
+        lib.showContext('mngr_menu')
     end
     if self.currentDistance > dist then
         lib.hideTextUI()
@@ -41,33 +41,23 @@ end
 --------------------------------------------------------------------------------
 -- context menu
 lib.registerContext({
-    id = 'work_menu',
-    title = 'Work Menu',
+    id = 'mngr_menu',
+    title = 'Manager Menu',
     options = {
       {
-        title = 'Start task 1',
-        description = 'Example button description',
-        icon = 'user',
+        title = 'Clock in',
+        description = 'Check into work',
+        icon = 'clock',
         onSelect = function()
-          print("Pressed the button!")
+          lib.callback('service:setin', false, function(service)
+            print(service)
+          end)
         end,
         metadata = {
           {label = 'Value 1', value = 'Some value'},
           {label = 'Value 2', value = 300}
         },
-      },
-      {
-        title = 'start task 2',
-        description = 'Example button description',
-        icon = 'city',
-        onSelect = function()
-          print("Pressed the button!")
-        end,
-        metadata = {
-          {label = 'Value 1', value = 'Some value'},
-          {label = 'Value 2', value = 300}
-        },
-      },
+      }
     }
   })
 
