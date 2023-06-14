@@ -3,10 +3,10 @@ local resourceName = GetCurrentResourceName()
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- work ped
-local function ped_work()
-    local model = Config.peds.work.model
-    local coords = Config.peds.work.loc
-    local anim = Config.peds.work.anim
+local function ped_unif()
+    local model = Config.peds.unif.model
+    local coords = Config.peds.unif.loc
+    local anim = Config.peds.unif.anim
     
 
     if lib.requestModel(model, 1000) then
@@ -15,22 +15,22 @@ local function ped_work()
 end
 
 -- point location
-local workped_coords = Config.peds.work.loc
-local workped = lib.points.new({
-    coords = workped_coords,
-    distance = 3,
+local unifped_coords = Config.peds.unif.loc
+local unifped = lib.points.new({
+    coords = unifped_coords,
+    distance = 4,
     currentDistance = 2
 })
 
 -- text ui load
-function workped:nearby()
-    local dist = Config.peds.work.dist
+function unifped:nearby()
+    local dist = Config.peds.unif.dist
     if self.currentDistance < dist then
-        lib.showTextUI('[E] - Work Menu')
+        lib.showTextUI('[E] - Uniform Menu')
     end
     if self.currentDistance < dist and IsControlJustReleased(0, 38) then
         lib.hideTextUI()
-        lib.showContext('work_menu')
+        lib.showContext('unif_menu')
     end
     if self.currentDistance > dist then
         lib.hideTextUI()
@@ -41,21 +41,36 @@ end
 --------------------------------------------------------------------------------
 -- context menu
 lib.registerContext({
-    id = 'work_menu',
-    title = 'Work Menu',
+    id = 'unif_menu',
+    title = 'Uniform Menu',
     options = {
       {
-        title = 'Request workbag',
-        description = 'Contains all the tools you need',
-        icon = 'suitcase',
+        title = 'Uniform 1',
+        description = 'The standard work uniform',
+        icon = 'briefcase',
         onSelect = function()
-          print("Pressed the button!")
+            local ped = cache.ped
+            Util.outfitter(ped)
         end,
         metadata = {
-          {label = 'Value 2', value = 1},
-          {label = 'Value 2', value = 1},
-          {label = 'Value 2', value = 1},
-          {label = 'Value 2', value = 1},
+          {label = 'body', value = 'item'},
+          {label = 'body', value = 'item'},
+          {label = 'body', value = 'item'},
+          {label = 'body', value = 'item'},
+        },
+      },
+      {
+        title = 'Personal Wardrobe',
+        description = 'Change back to your casual fit',
+        icon = 'shirt',
+        onSelect = function()
+          TriggerEvent('ox_appearance:wardrobe')
+        end,
+        metadata = {
+          {label = 'body', value = 'item'},
+          {label = 'body', value = 'item'},
+          {label = 'body', value = 'item'},
+          {label = 'body', value = 'item'},
         },
       },
     }
@@ -66,7 +81,7 @@ lib.registerContext({
 -- main thread
 Citizen.CreateThread(function()
     if resourceName == GetCurrentResourceName() then
-        ped_work()
+        ped_unif()
         Citizen.Wait(1000)
     end
 end)

@@ -1,10 +1,6 @@
 -- local variables
 local resourceName = GetCurrentResourceName()
 local workblip = nil
-local table = lib.table
-InService = player?.inService 
-    and table.contains(Config.job.name, player.inService) 
-    and player.hasGroup(Config.job.name)
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -28,13 +24,6 @@ local function loadjob()
     workloc_blip()
 end
 
-lib.callback.register('startservice', function()
-    
-end)
-
-lib.callback.await('logout', function()
-    InService = false
-end)
 
 -- main thread
 Citizen.CreateThread(function()

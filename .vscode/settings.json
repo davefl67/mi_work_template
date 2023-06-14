@@ -3,6 +3,7 @@
         "lib",
         "AddTextComponentString",
         "Ox",
-        "s_in_service"
+        "s_in_service",
+        "cache"
     ]
 }

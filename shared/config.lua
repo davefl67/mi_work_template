@@ -16,6 +16,11 @@ Config.blip = {
     name = 'Work Place'
 }
 
+Config.salary = {
+    pers = true,
+    intvl = 1,
+}
+
 Config.peds = {
 
     -- for changing animations, use https://github.com/DioneB/gtav-scenarios for refrence
@@ -33,6 +38,13 @@ Config.peds = {
         dist = 3 -- distance before textUI appears
     },
 
+    unif = {
+        model = 'ig_natalia', -- ped model
+        loc = vector4(-191.92, -1339.18, 30.801, 86.636), -- spawn location
+        anim = 'WORLD_HUMAN_SEAT_WALL_TABLET', -- standing animation
+        dist = 3 -- distance before textUI appears
+    },
+
     mngr = {
         model = 'ig_paige', -- ped model
         loc = vector4(-192.903, -1315.493, 30.802, 270.0), -- spawn location
@@ -41,6 +53,19 @@ Config.peds = {
     },
 }
 
-
+Config.uni = {
+    u1 = {
+        arms = {obj = 4, txt = 0},
+        torso = {obj = 111, txt = 0},
+        undershirt = {obj = 44, txt = 0},
+        pants = {obj = 10, txt = 0},
+        shoes = {obj = 19, txt = 0},
+        bag = {obj = 281, txt = 6},
+        accs = {obj = 0, txt = 0},
+        kevlar = {obj = 7, txt = 0},
+        badge = {obj = 0, txt = 0},
+        hat = {obj = 1, txt = 0},
+    }
+}
 
 

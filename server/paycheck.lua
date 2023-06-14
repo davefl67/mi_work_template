@@ -1,6 +1,7 @@
 -- local variables
 local pefcl = exports.pefcl
-local paycheckInterval = 15
+local paycheckInterval = Config.salary.intvl
+local salary = Config.salary.pers 
 local paychecks = {
     ['job1'] = { 100, 200, 300 },
 }
@@ -15,10 +16,10 @@ end)
 -- Credit and thanks to FlakeSkillz for creating this method of paycheck intervals
 ---@diagnostic disable: missing-parameter, param-type-mismatch
 CreateThread(function()
-    while s_in_service == true do
+    while salary == true do
         Wait(paycheckInterval * 60000)
         for _, player in pairs(Ox.GetPlayers()) do
-            local group = Config.jobname
+            local group = Config.job.name
             local grade = player.getGroup(group)
             local paycheck = paychecks?[group]?[grade]
 

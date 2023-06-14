@@ -1,4 +1,5 @@
 Job = {}
+Job.inService = false
 
 -- if the idea of this file is confusing, just think of it like another config file
 -- shit be nutty when I found out I could do that
