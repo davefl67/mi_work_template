@@ -14,11 +14,13 @@ description 'Need work? Make a job'
 -- Manifest
 shared_scripts {
 	'@ox_lib/init.lua',
-	'config.lua'
+    'shared/jobs.lua',
+	'shared/config.lua'
 }
 
 client_scripts {
     '@ox_core/imports/client.lua',
+    'client/peds/*.lua',
     'client/jobs.lua',
     'client/util.lua',
     'client/main.lua'

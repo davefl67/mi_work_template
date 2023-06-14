@@ -137,9 +137,6 @@ RegisterNetEvent('miwt:c:start_job1', function()
     })
     sp_jblip()
     sp_taskped()
-    if health == 0 then
-        TriggerEvent('miwt:c:failed_job')
-    end
 end)
 
 RegisterNetEvent('miwt:c:finish_job1', function()
