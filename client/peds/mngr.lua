@@ -3,10 +3,10 @@ local resourceName = GetCurrentResourceName()
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- work ped
-local function ped_vehicle()
-    local model = Config.peds.spawn.model
-    local coords = Config.peds.spawn.loc
-    local anim = Config.peds.spawn.anim
+local function ped_boss()
+    local model = Config.peds.mngr.model
+    local coords = Config.peds.mngr.loc
+    local anim = Config.peds.mngr.anim
     
 
     if lib.requestModel(model, 1000) then
@@ -15,22 +15,22 @@ local function ped_vehicle()
 end
 
 -- point location
-local spawnped_coords = Job.vehicle.loc
-local spawnped = lib.points.new({
-    coords = spawnped_coords,
-    distance = 4,
+local mngrped_coords = Config.peds.mngr.loc
+local mngrped = lib.points.new({
+    coords = mngrped_coords,
+    distance = 3,
     currentDistance = 2
 })
 
 -- text ui load
-function spawnped:nearby()
-    local dist = Config.peds.spawn.dist
+function mngrped:nearby()
+    local dist = Config.peds.mngr.dist
     if self.currentDistance < dist then
-        lib.showTextUI('[E] - Vehicle Menu')
+        lib.showTextUI('[E] - Manager Menu')
     end
     if self.currentDistance < dist and IsControlJustReleased(0, 38) then
         lib.hideTextUI()
-        lib.showContext('vehicle_menu')
+        lib.showContext('work_menu')
     end
     if self.currentDistance > dist then
         lib.hideTextUI()
@@ -41,26 +41,32 @@ end
 --------------------------------------------------------------------------------
 -- context menu
 lib.registerContext({
-    id = 'vehicle_menu',
-    title = 'Vehicle Menu',
+    id = 'work_menu',
+    title = 'Work Menu',
     options = {
       {
-        title = 'Spawn Vehicle',
-        description = 'spawn work vehicle',
-        icon = 'car',
+        title = 'Start task 1',
+        description = 'Example button description',
+        icon = 'user',
         onSelect = function()
-            local vehicle = Job.vehicle.model
-            vehicle = lib.callback.await('veh:spawn', false, source)
-            print(vehicle)
+          print("Pressed the button!")
         end,
+        metadata = {
+          {label = 'Value 1', value = 'Some value'},
+          {label = 'Value 2', value = 300}
+        },
       },
       {
-        title = 'Return Vehicle',
-        description = 'return work vehicle',
-        icon = 'car',
+        title = 'start task 2',
+        description = 'Example button description',
+        icon = 'city',
         onSelect = function()
-            lib.callback.await('veh:delete', false)
+          print("Pressed the button!")
         end,
+        metadata = {
+          {label = 'Value 1', value = 'Some value'},
+          {label = 'Value 2', value = 300}
+        },
       },
     }
   })
@@ -70,7 +76,7 @@ lib.registerContext({
 -- main thread
 Citizen.CreateThread(function()
     if resourceName == GetCurrentResourceName() then
-        ped_vehicle()
+        ped_boss()
         Citizen.Wait(1000)
     end
 end)

@@ -27,13 +27,13 @@ Config.peds = {
         model = 'u_m_y_smugmech_01',
         loc = vector4(-198.347, -1324.425, 31.3, 109.679),
         anim = 'WORLD_HUMAN_DRINKING_FACILITY',
-        dist = 5
+        dist = 3
     },
 
-    boss = {
-        model = 'mp_m_waremech_01',
-        loc = vector4(-206.181, -1334.369, 31.301, 64.025),
-        anim = 'WORLD_HUMAN_DRINKING_FACILITY',
+    mngr = {
+        model = 'ig_paige',
+        loc = vector4(-192.903, -1315.493, 30.802, 270.0),
+        anim = 'PROP_HUMAN_SEAT_COMPUTER_LOW',
         dist = 2
     },
 }
