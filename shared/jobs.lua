@@ -1,11 +1,8 @@
 Job = {}
 
 Job.vehicle = {
-    model1 = 'faggio',
-    model2 = 'speedo',
-    model3 = 'buffalo',
-    loc = vector3(-462.499, -51.986, 44.134),
-    head = 87.365
+    model = 'buffalo2',
+    loc = vector4(-200.664, -1326.977, 30.919, 90.081),
 }
 
 -- peds

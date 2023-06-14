@@ -1,38 +1,22 @@
-
---[[ NEEDS WORK - cannot delete vehicle
--- spawn vehicle
-RegisterServerEvent('sp_vehicle', function(vehicle)
+lib.callback.register('veh:spawn', function(source)
     local player = Ox.GetPlayer(source)
-    print(json.encode(player, { indent = true }))
-
+    local coords = Job.vehicle.loc
     vehicle = Ox.CreateVehicle({
-        model = vehicle,
-        group = Config.jobname,
+        model = Job.vehicle.model,
         owner = player.charid,
-    }, Config.vehicle.loc, Config.vehicle.head)
-    print(json.encode(vehicle, { indent = true }))
+        group = Config.job.name
+    }, Job.vehicle.loc)
 end)
 
--- despawn & de-own vehicle
-RegisterServerEvent('dl_vehicle', function(source)
-    --local player = GetPlayerPed(source)
-    local entity = vehicle
-
+lib.callback.register('veh:delete', function(source)
+    local player = GetPlayerPed(source)
+    local entity = GetVehiclePedIsIn(player, false)
     if entity == 0 then return end
-
     local vehicle = Ox.GetVehicle(entity)
-
     if vehicle then
-        -- delete the entity and remove it from the database, if it is persistant
-        -- player vehicles go bye-bye forever
         vehicle.delete()
     else
-        -- it's a random vehicle, i.e. traffic or a vehicle that has been spawned without using ox_core
         DeleteEntity(entity)
     end
-
-    -- tell the client the vehicle was deleted
     return true
 end)
-
-]]
