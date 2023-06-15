@@ -8,6 +8,23 @@ Util.spawn_ped = function(model, x, y, z, w, anim)
         SetBlockingOfNonTemporaryEvents(ped, true)
 end
 
+Util.remove_ped = function(ped)
+    DeleteEntity(ped)
+end
+
+Util.spawn_obj = function(model, x, y, z, w)
+    local obj = CreateObject(model, x, y, z-1, true, true, true)
+    SetEntityHeading(obj, w)
+    SetModelAsNoLongerNeeded(model)
+    PlaceObjectOnGroundProperly(obj)
+    FreezeEntityPosition(obj, true)
+    SetEntityCollision(obj, true, true)
+end
+
+Util.remove_obj = function(obj)
+    DeleteEntity(obj)
+end
+
 Util.teleport = function(ped, x, y, z, w)
     DoScreenFadeOut(100)
     Wait(100)

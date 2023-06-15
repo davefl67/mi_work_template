@@ -15,10 +15,12 @@ Job.job1 = {
     [1] = {
         loc = vector4(-469.636, -45.823, 44.516, 176.483), -- spawn location
         model = 'mp_f_chbar_01', -- ped model
+        anim = 'WORLD_HUMAN_DRINKING_FACILITY', -- standing animation
     },
     [2] = {
         loc = vector4(-472.071, -45.691, 44.516, 179.329), -- spawn location
         model = 'a_f_y_indian_01', -- ped model
+        anim = 'WORLD_HUMAN_DRINKING_FACILITY', -- standing animation
     }
 }
 
