@@ -5,7 +5,7 @@ Job.inService = false
 -- shit be nutty when I found out I could do that
 
 Job.vehicle = {
-    model = 'buffalo2', -- vehicle model
+    model = 'buffalo4', -- vehicle model
     loc = vector4(-200.664, -1326.977, 30.919, 90.081), -- spawn location
 }
 

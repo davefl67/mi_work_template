@@ -1,5 +1,14 @@
 local resourceName = GetCurrentResourceName()
+local employeenames = setmetatable({}, {
+	__index = function(self, index)
+		local data = Ox.GetVehicleData(index)
 
+		if data then
+			self[index] = data.name
+			return data.name
+		end
+	end
+})
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- work ped
@@ -37,6 +46,18 @@ function mngrped:nearby()
     end
 end
 
+-- huge credit to hyperextended for the group manager system
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- manager functions
+--[[
+local function employeelist()
+  local options = {}
+
+  for i = 1, 
+end
+]]
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- context menu
@@ -45,18 +66,21 @@ lib.registerContext({
     title = 'Manager Menu',
     options = {
       {
-        title = 'Clock in',
-        description = 'Check into work',
-        icon = 'clock',
+        title = 'Employee Options',
+        description = 'Manage current employees',
+        icon = 'users',
         onSelect = function()
-          lib.callback('service:setin', false, function(service)
-            print(service)
-          end)
+          local player = cache.ped
+          print(player)
         end,
-        metadata = {
-          {label = 'Value 1', value = 'Some value'},
-          {label = 'Value 2', value = 300}
-        },
+      },
+      {
+        title = 'Hiring options',
+        description = 'Manage Employees',
+        icon = 'user',
+        onSelect = function()
+          print('Hiring menu')
+        end,
       }
     }
   })

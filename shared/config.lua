@@ -53,19 +53,31 @@ Config.peds = {
     },
 }
 
-Config.uni = {
-    u1 = {
-        arms = {obj = 4, txt = 0},
-        torso = {obj = 111, txt = 0},
-        undershirt = {obj = 44, txt = 0},
-        pants = {obj = 10, txt = 0},
-        shoes = {obj = 19, txt = 0},
-        bag = {obj = 281, txt = 6},
-        accs = {obj = 0, txt = 0},
-        kevlar = {obj = 7, txt = 0},
-        badge = {obj = 0, txt = 0},
-        hat = {obj = 1, txt = 0},
-    }
+Config.uniforms = {
+    male = {
+        arms = {component_id = 3, texture = 0, drawable = 4},
+        torso = {component_id = 11, texture = 6, drawable = 390},
+        undershirt = {component_id = 8, texture = 15, drawable = 178},
+        pants = {component_id = 4, texture = 6, drawable = 10},
+        shoes = {component_id = 6, texture = 0, drawable = 20},
+        bag = {component_id = 5, texture = 11, drawable = 27},
+        accesories = {component_id = 7, texture = 0, drawable = 38},
+        kevlar = {component_id = 9, texture = 0, drawable = 0},
+        badge = {component_id = 10, texture = 0, drawable = 0},
+        hat = {component_id = 0, texture = 0, drawable = -1}
+    },
+    female = {
+        arms = {component_id = 3, texture = 0, drawable = 4},
+        torso = {component_id = 11, texture = 0, drawable = 111},
+        undershirt = {component_id = 8, texture = 0, drawable = 44},
+        pants = {component_id = 4, texture = 0, drawable = 10},
+        shoes = {component_id = 6, texture = 0, drawable = 19},
+        bag = {component_id = 5, texture = 6, drawable = 281},
+        accesories = {component_id = 7, texture = 0, drawable = 0},
+        kevlar = {component_id = 9, texture = 0, drawable = 7},
+        badge = {component_id = 10, texture = 0, drawable = 0},
+        hat = {component_id = 0, texture = 0, drawable = 1}
+    },
 }
 
 

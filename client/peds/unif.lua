@@ -39,18 +39,51 @@ end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- clothing functions
+
+local function outfit_male(outfit)
+  exports['fivem-appearance']:setPedComponents(cache.ped, {outfit.torso, outfit.undershirt, outfit.pants, outfit.shoes, outfit.bag, outfit.accesories, outfit.kevlar, outfit.badge, outfit.arms})
+  exports['fivem-appearance']:setPedProps(cache.ped, {outfit.hat})
+end
+
+local function outfit_female(outfit)
+  exports['fivem-appearance']:setPedComponents(cache.ped, {outfit.torso, outfit.undershirt, outfit.pants, outfit.shoes, outfit.bag, outfit.accesories, outfit.kevlar, outfit.badge, outfit.arms})
+  exports['fivem-appearance']:setPedProps(cache.ped, {outfit.hat})
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- context menu
 lib.registerContext({
     id = 'unif_menu',
     title = 'Uniform Menu',
     options = {
       {
-        title = 'Uniform 1',
+        title = 'Uniform - male',
         description = 'The standard work uniform',
-        icon = 'briefcase',
+        icon = 'person',
         onSelect = function()
-            local ped = cache.ped
-            Util.outfitter(ped)
+            local outfit = Config.uniforms.male
+            outfit_male(outfit)
+        end,
+        metadata = {
+          {label = 'head', value = 'none'},
+          {label = 'shirt', value = 'tucket white button up'},
+          {label = 'jacket', value = 'green work jacket'},
+          {label = 'neck', value = 'black tie'},
+          {label = 'waist', value = 'none'},
+          {label = 'pants', value = 'khaki slacks'},
+          {label = 'shoes', value = 'brown dress shoes'},
+          {label = 'accs', value = 'security card'},
+        },
+      },
+      {
+        title = 'Uniform - female',
+        description = 'The standard work uniform',
+        icon = 'person-dress',
+        onSelect = function()
+          local outfit = Config.uniforms.male
+          outfit_female(outfit)
         end,
         metadata = {
           {label = 'body', value = 'item'},
