@@ -27,7 +27,7 @@ Self plug, but if you like the work, you can help me inject caffiene here:
 
 https://streamable.com/0kn4hh
 
-## Dependancies
+## Dependencies
 * [OverExtended](https://github.com/overextended/overextended.github.io)
     * [Core](https://github.com/overextended/ox_core)
     * [Lib](https://github.com/overextended/ox_lib)
