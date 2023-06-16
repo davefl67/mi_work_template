@@ -21,7 +21,7 @@ Self plug, but if you like the work, you can help me inject caffiene here:
 	* Job spawning / interacting with peds
 	* Job spawning / interacting with objects
 * Simple teleport system
-	* Context menu for chosing location to tp
+	* Context menu for choosing location to tp
 
 *quick video demo, map is from gabz subscription and is not included in the script*
 https://streamable.com/lxxpk5
