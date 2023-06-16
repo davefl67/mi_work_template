@@ -54,14 +54,14 @@ local job_pointb = lib.points.new({
     currentDistance = 2
 })
 function job_pointb:nearby()
-    if self.currentDistance < 1 then
+    if self.currentDistance < 2 then
         lib.showTextUI('[E] - Use Elevator')
     end
-    if self.currentDistance < 1 and IsControlJustReleased(0, 38) then
+    if self.currentDistance < 2 and IsControlJustReleased(0, 38) then
         lib.hideTextUI()
         lib.showContext('elevator_left')
     end
-    if self.currentDistance > 1 then
+    if self.currentDistance > 2 then
         lib.hideTextUI()
     end
 end
