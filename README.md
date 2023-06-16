@@ -24,7 +24,8 @@ Self plug, but if you like the work, you can help me inject caffiene here:
 	* Context menu for choosing location to tp
 
 *quick video demo, map is from gabz subscription and is not included in the script*
-https://streamable.com/lxxpk5
+
+https://streamable.com/0kn4hh
 
 ## Dependancies
 * [OverExtended](https://github.com/overextended/overextended.github.io)
