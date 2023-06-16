@@ -11,9 +11,8 @@ Util.remove_ped = function(ped)
     DeleteEntity(ped)
 end
 
-Util.spawn_obj = function(model, x, y, z, w)
-    local obj = CreateObject(model, x, y, z-1, true, true, true)
-    SetEntityHeading(obj, w)
+Util.obj_utils = function(obj, model, head)
+    SetEntityHeading(obj, head)
     SetModelAsNoLongerNeeded(model)
     PlaceObjectOnGroundProperly(obj)
     FreezeEntityPosition(obj, true)
@@ -42,4 +41,23 @@ Util.blip = function(blip, x, y, z, sprite, color, scale, name)
     BeginTextCommandSetBlipName('STRING')
     AddTextComponentSubstringPlayerName(name)
     EndTextCommandSetBlipName(blip)
+end
+
+Util.route = function(blip, sprite, color, route, routecolor, scale, name)
+    SetBlipSprite(blip, sprite)
+    SetBlipColour(blip, color)
+    SetBlipRoute(blip, route)
+    SetBlipRouteColour(blip, routecolor)
+    SetBlipScale(blip, scale)
+    SetBlipAsShortRange(blip, true)
+    BeginTextCommandSetBlipName('STRING')
+    AddTextComponentSubstringPlayerName(name)
+    EndTextCommandSetBlipName(blip)
+end
+
+Util.remove_blip = function(blip)
+    if DoesBlipExist(blip) then
+        SetBlipAsMissionCreatorBlip(blip, false)
+        RemoveBlip(blip)
+    end
 end

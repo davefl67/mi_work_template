@@ -1,8 +1,13 @@
 -- local variables
-local job_blip = nil
-local cur_task = nil
-local in_work = false
-local c_in_service = false
+local currenttask = nil
+local working = false
+local blip = nil
+
+local job = Config.job.name
+
+local pedjob = nil
+local objjob = nil
+
 local taskped = {
     spawned = false,
     ped = nil
@@ -13,100 +18,80 @@ local taskobj = {
 }
 
 -- set up job blip
-local function sp_jblip()
-    if job_blip ~= nil then
-        RemoveBlip(job_blip)
-        job_blip = nil
-    end
-    job_blip = AddBlipForCoord(
-        cur_task.loc.x, 
-        cur_task.loc.y,
-        cur_task.loc.z)
-        SetBlipSprite(job_blip, 1)
-        SetBlipColour(job_blip, 68)
-        SetBlipRoute(job_blip, true)
-        SetBlipRouteColour(job_blip, 68)
-        SetBlipScale(job_blip, 0.8)
-        BeginTextCommandSetBlipName('STRING')
-        AddTextComponentString('Delivery Location')
-        EndTextCommandSetBlipName(job_blip)
+local function taskblip()
+    local coords = currenttask.loc
+    local sprite = Job.blip.sprite
+    local color = Job.blip.color
+    local route = Job.blip.route
+    local routecolor = Job.blip.routecolor
+    local scale = Job.blip.scale
+    local name = Job.blip.name
+    blip = AddBlipForCoord(coords.x, coords.y, coords.z)
+    Util.route(sprite, color, route, routecolor, scale, name)
 end
 
 -- spawn task ped
 local function sp_taskped()
-    if taskped.spawned then return end
-    local model = lib.requestmodel(joaat(cur_task.model))
-    while not HasModelLoaded(joaat(cur_task.model)) do
-        Wait(100)
+    local model = lib.requestmodel(joaat(currenttask.model))
+    local coords = currenttask.loc
+    local anim = currenttask.anim
+    if taskped.spawned then return
+    else
+        local ped = CreatePed(1, model, coords.x, coords.y, coords.z-1, coords.w, false, false)
+        Util.ped_utils(ped, anim)
+        taskped.ped = ped
     end
-    local ped = CreatePed(4, 
-        cur_task.model, 
-        cur_task.loc.x, 
-        cur_task.loc.y, 
-        cur_task.loc.z-1, 
-        cur_task.loc.w, 
-        false, true)
-    taskped.ped = ped
-    TaskStartScenarioInPlace(ped, 'PROP_HUMAN_STAND_IMPATIENT', 0, true)
-    FreezeEntityPosition(ped, true)
-    SetEntityInvincible(ped, true)
-    SetBlockingOfNonTemporaryEvents(ped, true)
 
     local ped_options = {
         {
-            name = 'miwt:c:dojob1',
-            label = 'Deliver Pizza',
+            name = 'miwt:c:dojob2',
+            label = 'Do the job',
+            groups = job,
             icon = 'fa-solid fa-box',
-            event = 'miwt:c:finish_job1',
             canInteract = function(_, distance)
-                return distance < 2.0 and in_work
+                return distance < 2.0 and working
+            end,
+            onSelect = function()
+                TriggerEvent('wt:c:pedtaskend')
             end
         }
     }
 
     exports.ox_target:addLocalEntity(taskped.ped, ped_options)
-
     taskped.spawned = true
 end
 
 -- delete task ped
 local function dl_taskped()
-    if not taskped.spawned then return end
-    exports.ox_target:removeLocalEntity(taskped.ped, { 'miwt:c:dojob1' })
-    DeleteEntity(taskped.ped)
-    taskped.spawned = false
-    taskped.ped = nil
+    if not taskped.spawned then return 
+    else
+        exports.ox_target:removeLocalEntity(taskped.ped, { 'miwt:c:dojob1' })
+        Util.remove_ped(taskped.ped)
+        taskped.spawned = false
+        taskped.ped = nil
+    end
+    
 end
 
 -- spawn task object
 local function sp_taskobj()
+    local model = lib.requestModel(joaat(currenttask.object))
+    local coords = currenttask.loc
     if taskobj.spawned then return end
-    local model = lib.requestModel(joaat(cur_task.object))
-    while not HasModelLoaded(cur_task.object) do
-        Wait(100)
-    end
-
-    local object = CreateObject(
-        cur_task.object, 
-        cur_task.loc.x, 
-        cur_task.loc.y, 
-        cur_task.loc.z, 
-        true, true, true)
+    local object = CreateObject(currenttask.object, coords.x, coords.y, coords.z, true, true, true)
+    Util.obj_utils(object, model, coords.w)
     taskobj.obj = object
-
-    SetModelAsNoLongerNeeded(model)
-    PlaceObjectOnGroundProperly(object)
-    FreezeEntityPosition(object, true)
-    SetEntityCollision(object, true, true)
 
     local obj_options = {
         {
             name = 'miwt:c:dojob2',
             label = 'Do the job',
             icon = 'fa-solid fa-box',
-            event = 'miwt:c:finish_job2',
             canInteract = function(_, distance)
-                return distance < 2.0 and in_work
+                return distance < 2.0 and working
+            end,
+            onSelect = function()
+                TriggerEvent('wt:c:objtaskend')
             end
         }
     }
@@ -117,108 +102,111 @@ end
 
 -- delete task object
 local function dl_taskobj()
-    if not taskobj.spawned then return end
-    exports.ox_target:removeLocalEntity(taskobj.obj, { 'miwt:c:dojob2' })
-    DeleteEntity(taskobj.obj)
-    taskobj.spawned = false
-    taskobj.obj = nil
+    if not taskobj.spawned then return 
+    else
+        exports.ox_target:removeLocalEntity(taskobj.obj, { 'miwt:c:dojob2' })
+        DeleteEntity(taskobj.obj)
+        taskobj.spawned = false
+        taskobj.obj = nil
+    end
+    
 end
 
 ---------- Job Events ----------
-RegisterNetEvent('miwt:c:start_job1', function()
-    if in_work and c_in_service == true then return end
-    local task1 = Config.job1[math.random(1, #Config.job1)]
-    cur_task = task1
-    in_work = true
-    lib.notify({
-        title = 'Delivery Started',
-        description = 'It\'s pizza time',
-        type = 'inform'
-    })
-    sp_jblip()
-    sp_taskped()
+RegisterNetEvent('wt:c:pedtaskstart', function()
+    local task = Job.pedtask
+    if working then 
+        lib.notify({
+            title = 'Already working',
+            description = 'Complete your current task before getting another one',
+            type = 'error'
+        })
+    else
+        pedjob = task[math.random(1, #task)]
+        currenttask = pedjob
+        working = true
+        taskblip()
+        sp_taskped()
+        lib.notify({
+            title = 'Task started',
+            description = 'It\'s pizza time',
+            type = 'inform'
+        })
+    end
 end)
 
-RegisterNetEvent('miwt:c:finish_job1', function()
-    exports.scully_emotemenu:PlayByCommand('carrypizza')
+RegisterNetEvent('wt:c:pedtaskend', function()
+    exports.scully_emotemenu:PlayByCommand('notepad')
     if lib.progressBar({
         duration = 3000,
-        label = 'Delivering Pizza',
+        label = 'doing task',
         useWhileDead = false,
         canCancel = true,
         disable = {
             car = true,
         },
     }) then 
-        lib.callback('payout')
+        lib.callback('pedpayout')
         dl_taskped()
-        RemoveBlip(job_blip)
-        in_work = false
-        cur_task = nil 
+        working = false
+        currenttask = nil 
+        Util.remove_blip(blip)
     else 
         print('Do stuff when cancelled') 
     end
     exports.scully_emotemenu:CancelAnimation()
     lib.notify({
-        title = 'Delivery Completed',
+        title = 'Task Completed',
         description = 'Good Pizza Time',
         type = 'success'
     })
-    
-    
 end)
 
-RegisterNetEvent('miwt:c:start_job2', function()
-    if in_work and c_in_service == true then return end
-    local task2 = Config.job2[math.random(1, #Config.job2)]
-    cur_task = task2
-    in_work = true
-    lib.notify({
-        title = 'Task active',
-        description = 'Do the job',
-        type = 'inform'
-    })
-    sp_jblip()
-    sp_taskobj()
-end)
-
-RegisterNetEvent('miwt:c:finish_job2', function()
-    exports.scully_emotemenu:PlayByCommand('mechanic4')
-    local success = lib.skillCheck({'easy', 'easy', 'easy'}, {'w', 'a', 's', 'd'})
-    if success == true then
+RegisterNetEvent('wt:c:objtaskstart', function()
+    local task = Job.objtask
+    if working then 
         lib.notify({
-            title = 'Task Completed',
-            description = 'Good job',
-            type = 'success'
-        })
-        RemoveBlip(job_blip)
-        exports.scully_emotemenu:CancelAnimation()
-        lib.callback('payout')
-        dl_taskobj()
-        in_work = false
-        cur_task = nil
-    else
-        RemoveBlip(job_blip)
-        lib.notify({
-            title = 'Task Failed',
-            description = 'Not good job',
+            title = 'Already working',
+            description = 'Complete your current task before getting another one',
             type = 'error'
         })
-        exports.scully_emotemenu:CancelAnimation()
-        dl_taskobj()
-        in_work = false
-        cur_task = nil
+    else
+        objjob = task[math.random(1, #task)]
+        currenttask = objjob
+        working = true
+        taskblip()
+        sp_taskobj()
+        lib.notify({
+            title = 'Task started',
+            description = 'It\'s pizza time',
+            type = 'inform'
+        })
     end
 end)
 
-RegisterNetEvent('miwt:c:failed_job', function()
-    RemoveBlip(job_blip)
+RegisterNetEvent('wt:c:objtaskend', function()
+    exports.scully_emotemenu:PlayByCommand('mechanic4')
+    if lib.progressBar({
+        duration = 3000,
+        label = 'doing task',
+        useWhileDead = false,
+        canCancel = true,
+        disable = {
+            car = true,
+        },
+    }) then 
+        lib.callback('objpayout')
+        dl_taskobj()
+        working = false
+        currenttask = nil
+        Util.remove_blip(blip)
+    else 
+        print('Do stuff when cancelled') 
+    end
+    exports.scully_emotemenu:CancelAnimation()
     lib.notify({
-        title = 'Task Failed',
-        description = 'Not good job',
-        type = 'error'
+        title = 'Task Completed',
+        description = 'Good Pizza Time',
+        type = 'success'
     })
-    dl_taskobj()
-    in_work = false
-    cur_task = nil
 end)

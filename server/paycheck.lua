@@ -7,9 +7,16 @@ local paychecks = {
 }
 
 -- job payout
-lib.callback.register('payout', function(source)
+lib.callback.register('pedpayout', function(source)
     exports.pefcl:addBankBalance(source, { 
-        amount = Config.job1.payment, 
+        amount = Job.pedtask.payment, 
+        message = 'Job: Task c/w'})
+end)
+
+-- job payout
+lib.callback.register('objpayout', function(source)
+    exports.pefcl:addBankBalance(source, { 
+        amount = Job.objtask.payment, 
         message = 'Job: Task c/w'})
 end)
 

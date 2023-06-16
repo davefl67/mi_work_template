@@ -16,9 +16,15 @@ Config.blip = {
     name = 'Work Place'
 }
 
+Config.teleport = {
+    active = true,
+    pointa = vector4(-213.846, -1322.251, 31.3, 87.088),
+    pointb = vector4(-193.655, -1332.656, 34.989, 97.988)
+}
+
 Config.salary = {
     pers = true,
-    intvl = 1,
+    intvl = 15,
 }
 
 Config.peds = {

@@ -38,7 +38,19 @@ local function ped_work()
                 return distance < 2.0
             end,
             onSelect = function()
-                lib.callback.await('veh:delete', false)
+              TriggerEvent('wt:c:pedtaskstart')
+            end
+          },
+          {
+            name = 'ox:option2',
+            icon = 'fa-solid fa-gears',
+            groups = Config.job.name,
+            label = 'Request task type 2',
+            canInteract = function(_, distance)
+                return distance < 2.0
+            end,
+            onSelect = function()
+              TriggerEvent('wt:c:objtaskstart')
             end
           }
       }
@@ -56,46 +68,6 @@ local workped = lib.points.new({
     currentDistance = 2
 })
 
--- text ui load
---[[
-function workped:nearby()
-    local dist = Config.peds.work.dist
-    if self.currentDistance < dist then
-        lib.showTextUI('[E] - Work Menu')
-    end
-    if self.currentDistance < dist and IsControlJustReleased(0, 38) then
-        lib.hideTextUI()
-        lib.showContext('work_menu')
-    end
-    if self.currentDistance > dist then
-        lib.hideTextUI()
-    end
-end
-]]
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- context menu
-lib.registerContext({
-    id = 'work_menu',
-    title = 'Work Menu',
-    options = {
-      {
-        title = 'Request workbag',
-        description = 'Contains all the tools you need',
-        icon = 'suitcase',
-        onSelect = function()
-          print("Pressed the button!")
-        end,
-        metadata = {
-          {label = 'Value 2', value = 1},
-          {label = 'Value 2', value = 1},
-          {label = 'Value 2', value = 1},
-          {label = 'Value 2', value = 1},
-        },
-      },
-    }
-  })
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
