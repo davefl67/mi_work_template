@@ -10,13 +10,12 @@ end)
 
 lib.callback.register('veh:delete', function(source)
     local player = GetPlayerPed(source)
-    local entity = GetVehiclePedIsIn(player, false)
-    if entity == 0 then return end
-    local vehicle = Ox.GetVehicle(entity)
-    if vehicle then
+    local entity = GetVehiclePedIsIn(player, true)
+    local group = Config.job.name
+
+    if entity == 0 and vehicle.group ~= group then
+    elseif vehicle then
         vehicle.delete()
-    else
-        DeleteEntity(entity)
     end
     return true
 end)

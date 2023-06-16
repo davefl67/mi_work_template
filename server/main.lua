@@ -1,12 +1,13 @@
 -- local veriables
-local groupname = Config.job.name
+local Inventory = exports.ox_inventory
 
-
--- simple player service checker (server side)
-lib.callback.register('setjob', function(source, group, grade)
-    local player = Ox.GetPlayer()
-
-    if player then
-        player:setGroup(group, grade or 0)
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- workped
+lib.callback.register('wp:givebag', function(source)
+    local carry = Inventory:CanCarryItem(source, 'job_bag', 1)
+    if carry == false then return 
+    else 
+        Inventory:AddItem(source, 'job_bag', 1)
     end
 end)

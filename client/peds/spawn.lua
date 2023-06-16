@@ -1,5 +1,8 @@
 local resourceName = GetCurrentResourceName()
-
+local spawnped = {
+    spawned = false,
+    ped = nil
+  }
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- work ped
@@ -10,34 +13,44 @@ local function ped_vehicle()
     
 
     if lib.requestModel(model, 1000) then
-        Util.spawn_ped(model, coords.x, coords.y, coords.z, coords.w, anim) 
+        local ped = CreatePed(1, model, coords.x, coords.y, coords.z-1, coords.w, false, false)
+        Util.ped_utils(ped, anim)
+        spawnped.ped = ped
+        local options = {
+          {
+            name = 'veh_create',
+            icon = 'fa-solid fa-car',
+            groups = Config.job.name,
+            label = 'Request work vehicle',
+            canInteract = function(_, distance)
+                return distance < 2.0
+            end,
+            onSelect = function()
+                local vehicle = Job.vehicle.model
+                vehicle = lib.callback.await('veh:spawn', false, source)
+                print(vehicle)
+            end
+          },
+          {
+            name = 'veh_delet',
+            icon = 'fa-solid fa-xmark',
+            groups = Config.job.name,
+            label = 'Return work vehicle',
+            canInteract = function(_, distance)
+                return distance < 2.0
+            end,
+            onSelect = function()
+                lib.callback.await('veh:delete', false)
+            end
+          }
+      }
+      
+      exports.ox_target:addLocalEntity(spawnped.ped, options)
+      spawnped.spaned = true
     end
 end
 
--- point location
-local spawnped_coords = Job.vehicle.loc
-local spawnped = lib.points.new({
-    coords = spawnped_coords,
-    distance = 4,
-    currentDistance = 2
-})
-
--- text ui load
-function spawnped:nearby()
-    local dist = Config.peds.spawn.dist
-    if self.currentDistance < dist then
-        lib.showTextUI('[E] - Vehicle Menu')
-    end
-    if self.currentDistance < dist and IsControlJustReleased(0, 38) then
-        lib.hideTextUI()
-        lib.showContext('vehicle_menu')
-    end
-    if self.currentDistance > dist then
-        lib.hideTextUI()
-    end
-end
-
---------------------------------------------------------------------------------
+---------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- context menu
 lib.registerContext({

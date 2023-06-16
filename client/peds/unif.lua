@@ -1,5 +1,8 @@
 local resourceName = GetCurrentResourceName()
-
+local unifped = {
+  spawned = false,
+  ped = nil
+}
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- work ped
@@ -10,8 +13,28 @@ local function ped_unif()
     
 
     if lib.requestModel(model, 1000) then
-        Util.spawn_ped(model, coords.x, coords.y, coords.z, coords.w, anim) 
-    end
+      local ped = CreatePed(1, model, coords.x, coords.y, coords.z-1, coords.w, false, false)
+      Util.ped_utils(ped, anim)
+      unifped.ped = ped
+      local options = {
+        {
+          name = 'outfit',
+          event = 'outfit',
+          icon = 'fa-solid fa-shirt',
+          groups = Config.job.name,
+          label = 'Uniform Lockers',
+          canInteract = function(_, distance)
+              return distance < 2.0
+          end,
+          onSelect = function()
+            lib.showContext('unif_menu')
+          end
+        },
+    }
+    
+    exports.ox_target:addLocalEntity(unifped.ped, options)
+    unifped.spaned = true
+  end
 end
 
 -- point location
@@ -21,21 +44,6 @@ local unifped = lib.points.new({
     distance = 4,
     currentDistance = 2
 })
-
--- text ui load
-function unifped:nearby()
-    local dist = Config.peds.unif.dist
-    if self.currentDistance < dist then
-        lib.showTextUI('[E] - Uniform Menu')
-    end
-    if self.currentDistance < dist and IsControlJustReleased(0, 38) then
-        lib.hideTextUI()
-        lib.showContext('unif_menu')
-    end
-    if self.currentDistance > dist then
-        lib.hideTextUI()
-    end
-end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

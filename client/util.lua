@@ -1,7 +1,6 @@
 Util = {}
 
-Util.spawn_ped = function(model, x, y, z, w, anim)
-        local ped = CreatePed(1, model, x, y, z-1, w, false, false)
+Util.ped_utils = function(ped, anim)
         TaskStartScenarioInPlace(ped, anim, 0, true)
         FreezeEntityPosition(ped, true)
         SetEntityInvincible(ped, true)

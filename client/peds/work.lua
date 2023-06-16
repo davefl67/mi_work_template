@@ -1,5 +1,8 @@
 local resourceName = GetCurrentResourceName()
-
+local workped = {
+  spawned = false,
+  ped = nil
+}
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- work ped
@@ -10,7 +13,38 @@ local function ped_work()
     
 
     if lib.requestModel(model, 1000) then
-        Util.spawn_ped(model, coords.x, coords.y, coords.z, coords.w, anim) 
+        local ped = CreatePed(1, model, coords.x, coords.y, coords.z-1, coords.w, false, false)
+        Util.ped_utils(ped, anim)
+        workped.ped = ped
+        local options = {
+          {
+            name = 'ox:option2',
+            icon = 'fa-solid fa-briefcase',
+            groups = Config.job.name,
+            label = 'Request work bag',
+            canInteract = function(_, distance)
+                return distance < 2.0
+            end,
+            onSelect = function()
+                lib.callback('wp:givebag', false, source)
+            end
+          },
+          {
+            name = 'ox:option2',
+            icon = 'fa-solid fa-person-running',
+            groups = Config.job.name,
+            label = 'Request task type 1',
+            canInteract = function(_, distance)
+                return distance < 2.0
+            end,
+            onSelect = function()
+                lib.callback.await('veh:delete', false)
+            end
+          }
+      }
+      
+      exports.ox_target:addLocalEntity(workped.ped, options)
+      workped.spaned = true
     end
 end
 
@@ -23,6 +57,7 @@ local workped = lib.points.new({
 })
 
 -- text ui load
+--[[
 function workped:nearby()
     local dist = Config.peds.work.dist
     if self.currentDistance < dist then
@@ -36,6 +71,7 @@ function workped:nearby()
         lib.hideTextUI()
     end
 end
+]]
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
