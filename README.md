@@ -1,4 +1,7 @@
 ![Artboard 1](https://github.com/MIAgimir/mi_worktemplate/assets/116332087/86b893bb-bc22-4670-a410-467648cb2ee0)
+![GitHub all releases](https://img.shields.io/github/downloads/MIAgimir/mi_worktemplate/total)
+![GitHub](https://img.shields.io/github/license/MIAgimir/mi_worktemplate)
+
 ## This is a template:
 The point of this script is not to just *drag and drop. neato new job*, but for you to be able to duplicate this and create multiple simple jobs, sort of like the basic A to B esx jobs. Note that this is supported for **ox_core**, but if you know what you're doing I'm sure you can edit this script so it would fit with your framework. I encourage you to take this and learn from it, see if you can add some new features or make some radical change.
 
